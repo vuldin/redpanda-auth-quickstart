@@ -1,0 +1,41 @@
+version: "3.9"
+name: 1-redpanda-console
+networks:
+  redpanda_network:
+    driver: bridge
+services:
+  redpanda:
+    container_name: redpanda
+    image: docker.redpanda.com/redpandadata/redpanda:v23.1.6
+    command:
+    - redpanda start
+    - --smp 1
+    - --memory 1G
+    hostname: redpanda
+    volumes:
+    - ./redpanda-config:/etc/redpanda
+    - ./redpanda-data:/var/lib/redpanda/data
+    networks:
+    - redpanda_network
+    ports:
+    - 9092:9092
+    - 9644:9644
+    - 8081:8081
+    - 8082:8082
+  console:
+    container_name: redpanda-console
+    image: docker.redpanda.com/redpandadata/console:v2.2.3
+    command: -c '/app/console'
+    entrypoint: /bin/sh
+    hostname: redpanda-console
+    volumes:
+    - ./console-config:/tmp
+    networks:
+    - redpanda_network
+    environment:
+      CONFIG_FILEPATH: /tmp/redpanda-console-config.yml
+    ports:
+    - 8080:8080
+    depends_on:
+    - redpanda
+

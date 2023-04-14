@@ -1,0 +1,18 @@
+kafka:
+  brokers:
+  - "redpanda:19092"
+  schemaRegistry:
+    enabled: true
+    urls:
+    - "http://redpanda:18081"
+#  sasl:
+#    enabled: true
+#    username: admin
+#    password: your_password
+#    mechanism: SCRAM-SHA-512
+redpanda:
+  adminApi:
+    enabled: true
+    urls:
+    - "http://redpanda:9644"
+
